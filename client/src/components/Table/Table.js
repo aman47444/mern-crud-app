@@ -5,7 +5,7 @@ import { BsEyeFill } from 'react-icons/bs'
 import { withRouter } from 'react-router-dom'
 
 function Table(props) {
-    const { data, getId, handleEdit, history, handleView } = props
+    const { data, getId, handleEdit, history, handleViewUser } = props
     const iocnStyle = {
         fontSize: '25px',
         margin: '0px 5px',
@@ -39,7 +39,7 @@ function Table(props) {
                                         <td>
                                             <FiEdit type="button" style={iocnStyle} onClick={() => handleEdit(item._id, history)} />
                                             <RiDeleteBin6Line onClick={() => getId(item._id)} style={iocnStyle} type="button" />
-                                            <BsEyeFill type="button" style={iocnStyle} onClick={() => handleView(item._id)} />
+                                            <BsEyeFill type="button" style={iocnStyle} onClick={() => handleViewUser(item._id, history)} />
                                         </td>
                                     }
                                 </tr>

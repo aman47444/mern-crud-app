@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi'
+
 function UpdateForm(props) {
 
     const [upadeName, setUpdateName] = useState('');
@@ -17,6 +19,10 @@ function UpdateForm(props) {
         company: updateCompany ? updateCompany : company,
         dob: updateDob ? updateDob : dob,
         salary: updateSalary ? updateSalary : salary
+    }
+
+    const handleViewBack = () => {
+        history.push('/')
     }
 
     return (
@@ -46,6 +52,9 @@ function UpdateForm(props) {
                 <button type="submit" className="btn btn-info ml-0 p-0">Submit</button>
             </form>
             <div className="mt-2">* Denote the required field</div>
+            <div className="d-flex justify-content-end">
+                <button className="my-2" type="button" onClick={handleViewBack}><BiArrowBack/>Back</button>
+            </div>
         </div>
     )
 }

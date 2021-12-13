@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi'
 
 function Form(props) {
 
@@ -18,6 +19,10 @@ function Form(props) {
     salary: salary
   }
   const isValid = name && email && company
+
+  const handleViewBack = () => {
+    history.push('/')
+  }
 
   return (
     <div>
@@ -45,6 +50,10 @@ function Form(props) {
         </div>
         <button type="submit" className={`btn btn-info ml-0 p-0 ${!isValid ? 'disabled': ''}`}>Submit</button>
       </form>
+      <div className="mt-2">* Denote the required field</div>
+      <div className="d-flex justify-content-end">
+        <button className="my-2" type="button" onClick={handleViewBack}><BiArrowBack />Back</button>
+      </div>
     </div>
   )
 }

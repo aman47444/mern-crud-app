@@ -6,19 +6,25 @@ import Axios from 'axios'
 import {
     BrowserRouter as Router,
     Switch,
-    Route
+    Route,
+    useHistory,
 } from "react-router-dom";
 import UpdateForm from "./components/UpdateForm/UpdateForm";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import View from "./components/View/View";
 
 
 const App = () => {
     const [data, setData] = useState([])
+    const [seachData, setSeachData] = useState([])
     const [updateData, setUpdateData] = useState([])
     const [page, setPage] = useState(0)
     const [autoRefresh, setAutoRefresh] = useState(false)
     const [isFetch, setIsFetch] = useState(false)
+    const [viewData, setView] = useState([])
+    const [changeValue, setChnageValue] = useState(null)
+    const history = useHistory();
 
     useEffect(() => {
         const apiData = async () => {
@@ -59,12 +65,13 @@ const App = () => {
             .then(() => history.push(`/update-user/${id}`))
     }
 
-    const handleView = (id) => {
-        console.log(id)
+    const handleViewUser = (id, history) => {
+        Axios.get(`/api/users/user/${id}`)
+        .then(res => setView(res.data))
+        .then(() => history.push(`/view-user/${id}`))
     }
 
     const handleUpdateForm = async (data, id, history) => {
-        console.log(data)
         try {
 
             const res = Axios.patch(`/api/users/user/${id}`, data)
@@ -93,6 +100,19 @@ const App = () => {
         setPage(num)
     }
 
+    const onChangeHandle = (e) => {
+        setChnageValue(e.target.value)
+        if (changeValue) {
+            let res = data.filter(
+              (item) =>
+                item.name.toLowerCase().includes(changeValue.toLowerCase()) ||
+                item.email.toLowerCase().includes(changeValue.toLowerCase()) ||
+                item.company.toLowerCase().includes(changeValue.toLowerCase())
+            );
+            setSeachData(res);
+        }
+    }
+
     return (
         <div className="container p-5">
             <ToastContainer
@@ -106,21 +126,22 @@ const App = () => {
                 draggable
                 pauseOnHover
             />
+            
             <Router>
                 <Switch>
                     <Route exact path="/">
                         <Pagination
-                            data={data}
+                            data={changeValue ? seachData : data}
                             Component={Table}
                             prevButton={prevButton}
                             nextButton={nextButton}
                             handleDelete={handleDelete}
                             handleEdit={handleEdit}
-                            handleView={handleView}
+                            handleViewUser={handleViewUser}
                             selectPage={selectPage}
                             page={page}
                             isFetch={isFetch}
-
+                            onChangeHandle={onChangeHandle}
                         />
                     </Route>
                     <Route path="/create">
@@ -128,6 +149,9 @@ const App = () => {
                     </Route>
                     <Route path="/update-user/:id">
                         <UpdateForm updateData={updateData} handleUpdateForm={handleUpdateForm}/>
+                    </Route>
+                    <Route path="/view-user/:id">
+                        <View viewData={viewData} history={history} />
                     </Route>
                 </Switch>
             </Router>
